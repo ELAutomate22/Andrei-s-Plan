@@ -1,0 +1,11 @@
+"use client";
+import { motion } from "framer-motion";
+import { Check, Minus, TrendingUp } from "lucide-react";
+import type { ReactNode } from "react";
+export function Panel({children,className="",accent=false}:{children:ReactNode;className?:string;accent?:boolean}){return <motion.section initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={{duration:.25}} className={`panel ${accent?"panel-accent":""} ${className}`}>{children}</motion.section>}
+export function Eyebrow({children}:{children:ReactNode}){return <span className="eyebrow">{children}</span>}
+export function Metric({label,value,detail,accent=false}:{label:string;value:string|number;detail?:string;accent?:boolean}){return <div className={`metric ${accent?"metric-accent":""}`}><span>{label}</span><strong>{value}</strong>{detail&&<small><TrendingUp size={13}/>{detail}</small>}</div>}
+export function ProgressBar({value,max=100}:{value:number;max?:number}){return <div className="progress" role="progressbar" aria-valuenow={value} aria-valuemax={max}><motion.i initial={false} animate={{scaleX:Math.min(value/max,1)}} transition={{type:"spring",stiffness:180,damping:24}}/></div>}
+export function ProgressRing({value,size=164}:{value:number;size?:number}){const r=52,c=2*Math.PI*r;return <div className="ring" style={{width:size,height:size}}><svg viewBox="0 0 120 120" aria-label={`${value}% complete`}><circle cx="60" cy="60" r={r}/><motion.circle className="ring-value" cx="60" cy="60" r={r} strokeDasharray={c} initial={false} animate={{strokeDashoffset:c*(1-value/100)}}/></svg><div><strong>{value}</strong><span>%</span><small>LOCK-IN SCORE</small></div></div>}
+export function CheckButton({checked,onClick,label}:{checked:boolean;onClick:()=>void;label:string}){return <button className={`check ${checked?"checked":""}`} onClick={onClick} aria-pressed={checked} aria-label={`${checked?"Mark incomplete":"Complete"}: ${label}`}><motion.span animate={{scale:checked?[.7,1.1,1]:1}}>{checked?<Check size={16}/>:<Minus size={16}/>}</motion.span><b>{label}</b></button>}
+export function EmptyState({title,body,action,onAction}:{title:string;body:string;action?:string;onAction?:()=>void}){return <div className="empty"><span>00</span><h3>{title}</h3><p>{body}</p>{action&&<button className="button secondary" onClick={onAction}>{action}</button>}</div>}

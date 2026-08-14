@@ -1,0 +1,13 @@
+{
+  "name": "LOCKED IN — Personal Operating System",
+  "short_name": "LOCKED IN",
+  "description": "Build the life. Track the proof.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050b18",
+  "theme_color": "#050b18",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
