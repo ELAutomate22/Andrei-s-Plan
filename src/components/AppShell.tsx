@@ -81,7 +81,6 @@ const nav: NavItem[] = [
 export function AppShell() {
   const { data, ready, update, syncStatus, lastSyncedAt, syncNow, signOut } = useApp();
   const [page, setPage] = useState("home"),
-    [collapsed, setCollapsed] = useState(false),
     [palette, setPalette] = useState(false),
     [mobileMenu, setMobileMenu] = useState(false);
   const cycle = data.cycles[0];
@@ -151,7 +150,7 @@ export function AppShell() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   return (
-    <div className={`app-shell ${collapsed ? "collapsed" : ""}`}>
+    <div className="app-shell">
       <VoxelTopographyGrid className="global-topography" />
       <div className="ambient-wash" aria-hidden="true" />
       <a className="skip" href="#main">
@@ -176,20 +175,19 @@ export function AppShell() {
           {nav.map((item) => (
             <button
               key={item.id}
-              className={page === item.id ? "active" : ""}
+              className={`nav-item ${page === item.id ? "active" : ""}`}
               onClick={() => navigate(item.id)}
               title={item.label}
+              aria-current={page === item.id ? "page" : undefined}
             >
-              <item.icon size={18} />
-              <span>{item.label}</span>
+              <span className="nav-icon" aria-hidden="true">
+                <item.icon size={19} />
+              </span>
+              <span className="nav-label">{item.label}</span>
               {page === item.id && <motion.i layoutId="nav-active" />}
             </button>
           ))}
         </nav>
-        <button className="collapse" onClick={() => setCollapsed(!collapsed)}>
-          <ChevronLeft />
-          <span>Collapse cockpit</span>
-        </button>
       </aside>
       <div className="shell-main">
         <header className="statusbar">
@@ -275,13 +273,18 @@ export function AppShell() {
             className={page === item.id ? "active" : ""}
             onClick={() => navigate(item.id)}
             key={item.id}
+            aria-current={page === item.id ? "page" : undefined}
           >
-            <item.icon />
+            <span className="bottom-nav-icon" aria-hidden="true">
+              <item.icon />
+            </span>
             <span>{item.label}</span>
           </button>
         ))}
         <button onClick={() => setMobileMenu(true)}>
-          <Menu />
+          <span className="bottom-nav-icon" aria-hidden="true">
+            <Menu />
+          </span>
           <span>More</span>
         </button>
       </div>
