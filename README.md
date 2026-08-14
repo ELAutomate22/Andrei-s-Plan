@@ -2,7 +2,7 @@
 
 **Build the life. Track the proof.**
 
-A local-first personal operating system built with Next.js, React, TypeScript, Framer Motion, Recharts, date-fns, Zod, and IndexedDB.
+A local-first personal operating system built with Next.js, React, TypeScript, Supabase, Framer Motion, Recharts, date-fns, Zod, and IndexedDB.
 
 ## Run on Windows — easiest
 
@@ -18,7 +18,13 @@ pnpm install
 pnpm dev
 ```
 
-Open `http://localhost:3000`.
+Copy `.env.example` to `.env.local`, add the Supabase project URL and browser-safe publishable key, then open `http://localhost:3000`.
+
+## Persistence and privacy
+
+Every edit is written immediately to a local journal and IndexedDB, then synchronized to the authenticated user's private Supabase row. Offline changes are merged when connectivity returns. Use **Settings → Backup my data** to export a complete JSON backup. The database migration and row-level security policy are tracked in `supabase/migrations/`.
+
+Only `andreieb@yahoo.com` is authorized by both the interface and the database policy. Never add a Supabase secret or service-role key to `NEXT_PUBLIC_*` variables.
 
 ## Verification
 
@@ -28,8 +34,6 @@ pnpm lint
 pnpm test
 pnpm build
 ```
-
-All personal records stay in the browser's IndexedDB. Use **Settings → Backup my data** to export a complete JSON backup. The PWA manifest and offline shell are in `public/`.
 
 ## First cycle
 

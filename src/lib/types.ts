@@ -22,3 +22,8 @@ export interface ReadingSession { id: string; type: "bible" | "book"; resource: 
 export interface LearningTrack { id: string; name: string; category: string; progress: number; hours: number; skills?: Record<string, number>; }
 export interface WeeklyReview { id: string; cycleId: string; weekNumber: number; wins: string; friction: string; lesson: string; nextObjective: string; ratings: Record<string, number>; }
 export interface AppData { version: 1; settings: UserSettings; cycles: Cycle[]; habits: HabitDefinition[]; dailyLogs: DailyLog[]; clients: Client[]; projects: Project[]; expenses: ExpenseEntry[]; income: IncomeEntry[]; goals: Goal[]; contributions: GoalContribution[]; ideas: Idea[]; appointments: Appointment[]; focusSessions: FocusSession[]; readingSessions: ReadingSession[]; learningTracks: LearningTrack[]; weeklyReviews: WeeklyReview[]; }
+
+export interface FieldClock { at: number; sequence: number; deviceId: string; }
+export type FieldClockMap = Record<string, FieldClock>;
+export interface SyncEnvelope { version: 1; data: AppData; clocks: FieldClockMap; tombstones: FieldClockMap; revision: number; deviceId: string; updatedAt: string; pending: boolean; }
+export type SyncStatus = "saving-local" | "syncing" | "synced" | "offline" | "error";

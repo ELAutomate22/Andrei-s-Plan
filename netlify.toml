@@ -5,3 +5,11 @@
 [build.environment]
   NODE_VERSION = "20"
   PNPM_VERSION = "10.15.0"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"

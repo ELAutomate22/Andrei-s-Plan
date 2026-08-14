@@ -1,0 +1,11 @@
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { createSeedData } from "./seed";
+import { createEnvelope, mergeEnvelopes, recordChanges } from "./sync";
+
+afterEach(()=>vi.restoreAllMocks());
+describe("cross-device merge",()=>{
+ it("preserves unrelated changes from two devices",()=>{const seed=createSeedData(),base=createEnvelope(seed,"baseline",false);const phone=recordChanges({...base,deviceId:"phone"},{...seed,settings:{...seed.settings,name:"Phone edit"}});const desktop=recordChanges({...base,deviceId:"desktop"},{...seed,dailyLogs:seed.dailyLogs.map((log,index)=>index?log:{...log,completions:{...log.completions,bible:true}})});const merged=mergeEnvelopes(phone,desktop);expect(merged.data.settings.name).toBe("Phone edit");expect(merged.data.dailyLogs[0].completions.bible).toBe(true)});
+ it("uses the newest clock when the same field changes",()=>{const seed=createSeedData();vi.spyOn(Date,"now").mockReturnValueOnce(100).mockReturnValueOnce(200).mockReturnValueOnce(300).mockReturnValueOnce(400);const first=recordChanges(createEnvelope(seed,"phone"),{...seed,settings:{...seed.settings,name:"Older"}});const second=recordChanges(createEnvelope(seed,"desktop"),{...seed,settings:{...seed.settings,name:"Newer"}});expect(mergeEnvelopes(first,second).data.settings.name).toBe("Newer")});
+ it("keeps records added concurrently",()=>{const seed=createSeedData();const phone=recordChanges(createEnvelope(seed,"phone"),{...seed,ideas:[{id:"phone-idea",title:"Phone",description:"",category:"Business",priority:"Medium",status:"INBOX",date:"2026-08-15"}]});const desktop=recordChanges(createEnvelope(seed,"desktop"),{...seed,ideas:[{id:"desktop-idea",title:"Desktop",description:"",category:"Business",priority:"Medium",status:"INBOX",date:"2026-08-15"}]});expect(mergeEnvelopes(phone,desktop).data.ideas.map(item=>item.id).sort()).toEqual(["desktop-idea","phone-idea"])});
+ it("honours a newer deletion tombstone",()=>{const seed=createSeedData();const added=recordChanges(createEnvelope(seed,"phone"),{...seed,ideas:[{id:"idea",title:"Temporary",description:"",category:"Business",priority:"Medium",status:"INBOX",date:"2026-08-15"}]});const removed=recordChanges(added,{...added.data,ideas:[]});expect(mergeEnvelopes(added,removed).data.ideas).toEqual([])});
+});
