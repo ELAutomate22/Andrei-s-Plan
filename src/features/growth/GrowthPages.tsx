@@ -6,8 +6,6 @@ import {
   BookMarked,
   BookOpen,
   BrainCircuit,
-  ExternalLink,
-  GraduationCap,
   Lightbulb,
   Pause,
   Play,
@@ -19,7 +17,9 @@ import { useApp } from "@/components/AppProvider";
 import { EmptyState, Eyebrow, Metric, Panel, ProgressBar } from "@/components/ui";
 import { currencies, currencyOf, currencySymbol, formatMoney } from "@/lib/money";
 import { goalSaved } from "@/lib/metrics";
-import type { Currency, LearningTrack, ReadingSession } from "@/lib/types";
+import type { Currency, ReadingSession } from "@/lib/types";
+
+export { IbmCoursePage as LearningPage } from "./IbmCoursePage";
 
 const uid = () => crypto.randomUUID();
 
@@ -28,83 +28,6 @@ function Header({ eyebrow, title, sub }: { eyebrow: string; title: string; sub: 
     <header className="page-title">
       <div><Eyebrow>{eyebrow}</Eyebrow><h1>{title}</h1><p>{sub}</p></div>
     </header>
-  );
-}
-
-export function LearningPage() {
-  const { data, update } = useApp();
-  const ibm = data.learningTracks.find((track) => track.id === "ibm") ??
-    ({ id: "ibm", name: "IBM Cybersecurity", category: "Cybersecurity", progress: 0, hours: 0 } satisfies LearningTrack);
-  const learningMinutes = data.dailyLogs.reduce((sum, log) => sum + log.learningMinutes, 0);
-  const studyDays = data.dailyLogs.filter((log) => log.learningMinutes > 0).length;
-  const updateTrack = (patch: Partial<LearningTrack>) => update((current) => {
-    const exists = current.learningTracks.some((track) => track.id === ibm.id);
-    return {
-      ...current,
-      learningTracks: exists
-        ? current.learningTracks.map((track) => track.id === ibm.id ? { ...track, ...patch } : track)
-        : [...current.learningTracks, { ...ibm, ...patch }],
-    };
-  });
-
-  return (
-    <div className="page module-page ibm-course-page">
-      <Header
-        eyebrow="IBM COURSE / STUDY WORKSPACE"
-        title="IBM CYBERSECURITY"
-        sub="Use this page to track where you are in the course, record what each lesson teaches you, and decide the next practical step."
-      />
-      <div className="metric-grid wide">
-        <Metric label="Course progress" value={`${ibm.progress}%`} accent />
-        <Metric label="Hours studied" value={`${ibm.hours.toFixed(1)}h`} />
-        <Metric label="Study days" value={studyDays} />
-        <Metric label="Daily log minutes" value={learningMinutes} />
-      </div>
-      <div className="ibm-course-grid">
-        <Panel accent className="ibm-progress-panel">
-          <div className="panel-heading">
-            <div><Eyebrow>COURSE EXECUTION</Eyebrow><h3>Progress & study time</h3></div>
-            <GraduationCap />
-          </div>
-          <p className="section-explainer">Update these after a study session so the dashboard reflects your real position.</p>
-          <ProgressBar value={ibm.progress} />
-          <label>
-            Overall course progress
-            <input type="range" min="0" max="100" value={ibm.progress} onChange={(event) => updateTrack({ progress: Number(event.target.value) })} />
-            <span className="field-value">{ibm.progress}% complete</span>
-          </label>
-          <label>
-            Total hours studied
-            <input type="number" min="0" step=".25" value={ibm.hours} onChange={(event) => updateTrack({ hours: Number(event.target.value) })} />
-          </label>
-          <label>
-            Course link
-            <input type="url" value={ibm.courseUrl ?? ""} placeholder="Paste the IBM course link" onChange={(event) => updateTrack({ courseUrl: event.target.value })} />
-          </label>
-          {ibm.courseUrl && <a className="button secondary course-link" href={ibm.courseUrl} target="_blank" rel="noreferrer">Open IBM course <ExternalLink /></a>}
-        </Panel>
-        <Panel className="ibm-position-panel">
-          <Eyebrow>CURRENT POSITION</Eyebrow>
-          <h3>Where to resume</h3>
-          <p className="section-explainer">Write the exact module and lesson you are on, then leave one clear action for your next session.</p>
-          <div className="course-fields">
-            <label>Current module<input value={ibm.currentModule ?? ""} placeholder="Example: Module 1 — Cybersecurity foundations" onChange={(event) => updateTrack({ currentModule: event.target.value })} /></label>
-            <label>Current lesson<input value={ibm.currentLesson ?? ""} placeholder="The lesson, lab, or assessment to continue" onChange={(event) => updateTrack({ currentLesson: event.target.value })} /></label>
-            <label>Next action<textarea value={ibm.nextAction ?? ""} placeholder="A small, specific next step — for example: finish the lab and write three notes" onChange={(event) => updateTrack({ nextAction: event.target.value })} /></label>
-          </div>
-        </Panel>
-        <Panel className="ibm-learning-notes">
-          <Eyebrow>TURN LEARNING INTO SKILL</Eyebrow>
-          <h3>Lesson notes</h3>
-          <p className="section-explainer">Summarise the idea in your own words, then decide how you will practise it instead of only watching it.</p>
-          <div className="course-notes-grid">
-            <label>What did this lesson teach me?<textarea value={ibm.keyTakeaway ?? ""} placeholder="Explain the main concept as if you were teaching it to someone else" onChange={(event) => updateTrack({ keyTakeaway: event.target.value })} /></label>
-            <label>How will I practise or apply it?<textarea value={ibm.practicePlan ?? ""} placeholder="Write the lab, exercise, command, or mini-project you will complete" onChange={(event) => updateTrack({ practicePlan: event.target.value })} /></label>
-            <label className="span-2">Important terms, tools, or questions<textarea value={ibm.studyNotes ?? ""} placeholder="Capture definitions, tools to revisit, mistakes, and unanswered questions" onChange={(event) => updateTrack({ studyNotes: event.target.value })} /></label>
-          </div>
-        </Panel>
-      </div>
-    </div>
   );
 }
 
