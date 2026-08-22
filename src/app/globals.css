@@ -258,3 +258,100 @@ button,a,input,select,textarea{touch-action:manipulation}
  .form-actions{flex-direction:column;align-items:stretch}
  .form-actions .button{width:100%}
 }
+
+/* Editable CRM records and currency-safe finance controls. */
+.record-editor{margin-bottom:12px!important}
+.record-editor .panel-heading{align-items:center}
+.icon-button{
+ width:44px;
+ height:44px;
+ flex:0 0 44px;
+ display:grid;
+ place-items:center;
+ border:1px solid var(--border);
+ border-radius:50%;
+ background:var(--surface-2);
+ color:var(--muted-text);
+}
+.icon-button:hover{color:var(--text);border-color:var(--accent)}
+.icon-button svg{width:18px}
+.edit-button{
+ min-height:44px;
+ padding:0 13px;
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ gap:7px;
+ border:1px solid var(--border);
+ border-radius:3px;
+ background:var(--surface-2);
+ color:var(--text);
+ font-size:.76rem;
+ font-weight:700;
+}
+.edit-button:hover{border-color:var(--accent);color:var(--accent)}
+.edit-button svg{width:15px}
+.client-table td:last-child,.client-table th:last-child{text-align:right}
+.currency-toolbar{
+ min-height:58px;
+ margin-bottom:12px;
+ padding:8px 12px;
+ display:flex;
+ align-items:center;
+ justify-content:flex-end;
+ gap:14px;
+ border:1px solid var(--border);
+ background:color-mix(in srgb,var(--surface) 74%,transparent);
+}
+.currency-toolbar label,.compact-select{
+ display:flex;
+ align-items:center;
+ gap:9px;
+ color:var(--muted-text);
+ font-size:.7rem;
+ text-transform:uppercase;
+ letter-spacing:.08em;
+}
+.currency-toolbar small{color:var(--muted-text);margin-right:auto}
+.currency-toolbar select,.compact-select select{min-width:142px;font-size:.78rem;text-transform:none;letter-spacing:0}
+.project-pricing{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:1px;
+ margin:18px 0 10px;
+ background:var(--border);
+}
+.project-pricing>span{display:grid;gap:3px;padding:12px;background:var(--surface-2)}
+.project-pricing small{color:var(--muted-text);font-size:.58rem;letter-spacing:.12em}
+.project-pricing b{font-size:1.08rem;font-variant-numeric:tabular-nums}
+.project-form textarea{min-height:86px}
+.money-actions{align-items:center}
+.money-actions .compact-select{min-height:46px;padding:0 10px;border:1px solid var(--border);background:var(--surface)}
+.money-ledger{display:grid;margin-top:18px}
+.money-ledger>div{
+ min-height:60px;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:16px;
+ padding:10px 0;
+ border-top:1px solid var(--border);
+}
+.money-ledger span{display:grid}
+.money-ledger small{color:var(--muted-text)}
+.money-ledger strong{color:var(--accent);font-variant-numeric:tabular-nums}
+.money-ledger strong.expense{color:var(--danger)}
+.goal-header-actions{display:flex;align-items:center;gap:10px}
+.goal-header-actions select{min-width:94px}
+.settings-grid .form-grid label>small{color:var(--muted-text);text-transform:none;line-height:1.35}
+@media(max-width:760px){
+ .currency-toolbar{align-items:stretch;flex-direction:column}
+ .currency-toolbar small{margin:0}
+ .currency-toolbar label{justify-content:space-between}
+ .money-actions{display:grid;grid-template-columns:1fr 1fr}
+ .money-actions .compact-select{grid-column:1/-1;justify-content:space-between}
+ .money-actions .button{width:100%}
+ .client-table table{min-width:820px}
+ .project-pricing{grid-template-columns:1fr}
+ .goal-header-actions{align-items:flex-end;flex-direction:column}
+}

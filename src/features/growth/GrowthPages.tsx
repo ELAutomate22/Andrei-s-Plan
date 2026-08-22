@@ -17,8 +17,9 @@ import {
 } from "lucide-react";
 import { useApp } from "@/components/AppProvider";
 import { EmptyState, Eyebrow, Metric, Panel, ProgressBar } from "@/components/ui";
+import { currencies, currencyOf, currencySymbol, formatMoney } from "@/lib/money";
 import { goalSaved } from "@/lib/metrics";
-import type { LearningTrack, ReadingSession } from "@/lib/types";
+import type { Currency, LearningTrack, ReadingSession } from "@/lib/types";
 
 const uid = () => crypto.randomUUID();
 
@@ -196,30 +197,36 @@ export function GoalsPage() {
   const { data, update } = useApp();
   const [alloc, setAlloc] = useState<string | null>(null);
   const add = (formData: FormData) => {
-    update((current) => ({ ...current, contributions: [...current.contributions, { id: uid(), goalId: String(formData.get("goalId")), amount: Number(formData.get("amount")), date: new Date().toISOString().slice(0, 10), note: String(formData.get("note")) }] }));
+    update((current) => ({ ...current, contributions: [...current.contributions, { id: uid(), goalId: String(formData.get("goalId")), amount: Number(formData.get("amount")), date: new Date().toISOString().slice(0, 10), note: String(formData.get("note")), currency: String(formData.get("currency")) as Currency }] }));
     setAlloc(null);
   };
+  const setGoalCurrency = (goalId: string, currency: Currency) => update((current) => ({
+    ...current,
+    goals: current.goals.map((goal) => goal.id === goalId ? { ...goal, currency } : goal),
+    contributions: current.contributions.map((contribution) => contribution.goalId === goalId ? { ...contribution, currency } : contribution),
+  }));
   return (
     <div className="page module-page">
       <Header eyebrow="OUTCOMES / MISSION CONTROL" title="GOALS" sub="Use this page to record money allocated toward each major goal and see how far you are from the target." />
       <div className="goal-page-grid">
         {data.goals.map((goal) => {
+          const currency = currencyOf(goal.currency);
           const saved = goalSaved(data, goal.id);
           const percent = Math.round(saved / goal.target * 100) || 0;
           const months = saved > 0 ? Math.max(1, Math.round(goal.target / Math.max(saved, 1))) : 0;
           return (
             <Panel key={goal.id} className={`large-goal ${goal.id}`}>
-              <div className="panel-heading"><div><Eyebrow>{goal.label}</Eyebrow><h2>{goal.name}</h2></div><Target /></div>
-              <div className="goal-money"><strong>£{saved.toLocaleString()}</strong><span>/ £{goal.target.toLocaleString()}</span></div>
+              <div className="panel-heading"><div><Eyebrow>{goal.label}</Eyebrow><h2>{goal.name}</h2></div><div className="goal-header-actions"><select aria-label={`Currency for ${goal.name}`} value={currency} onChange={(event) => setGoalCurrency(goal.id, event.target.value as Currency)}>{currencies.map((option) => <option value={option} key={option}>{option === "GBP" ? "£ GBP" : "€ EUR"}</option>)}</select><Target /></div></div>
+              <div className="goal-money"><strong>{formatMoney(saved, currency)}</strong><span>/ {formatMoney(goal.target, currency)}</span></div>
               <ProgressBar value={saved} max={goal.target} />
-              <div className="goal-facts"><span><b>{percent}%</b> funded</span><span><b>{goal.target - saved > 0 ? `£${(goal.target - saved).toLocaleString()}` : "DONE"}</b> remaining</span><span><b>{months ? format(addMonths(new Date(), months), "MMM yyyy") : "—"}</b> current projection</span></div>
+              <div className="goal-facts"><span><b>{percent}%</b> funded</span><span><b>{goal.target - saved > 0 ? formatMoney(goal.target - saved, currency) : "DONE"}</b> remaining</span><span><b>{months ? format(addMonths(new Date(), months), "MMM yyyy") : "—"}</b> current projection</span></div>
               <button className="button" onClick={() => setAlloc(goal.id)}>Allocate funds</button>
-              {alloc === goal.id && <form action={add} className="inline-form"><input type="hidden" name="goalId" value={goal.id} /><label>Amount (£)<input name="amount" type="number" min="1" required autoFocus /></label><label>Note<input name="note" placeholder="Invoice, salary, saving…" /></label><button className="button">Allocate</button></form>}
+              {alloc === goal.id && <form action={add} className="inline-form"><input type="hidden" name="goalId" value={goal.id} /><input type="hidden" name="currency" value={currency} /><label>Amount ({currencySymbol(currency)})<input name="amount" type="number" step="0.01" min="1" required autoFocus /></label><label>Note<input name="note" placeholder="Invoice, salary, saving…" /></label><button className="button">Allocate</button></form>}
             </Panel>
           );
         })}
       </div>
-      <Panel><Eyebrow>M4 SCENARIOS</Eyebrow><h3>If I save consistently…</h3><div className="scenario-grid">{[500, 1000, 1500, 2000].map((amount) => { const remaining = Math.max(0, data.goals[0].target - goalSaved(data, "m4")); return <div key={amount}><span>£{amount.toLocaleString()} / month</span><strong>{format(addMonths(new Date(), Math.ceil(remaining / amount)), "MMM yyyy")}</strong></div>; })}</div></Panel>
+      <Panel><Eyebrow>M4 SCENARIOS</Eyebrow><h3>If I save consistently…</h3><div className="scenario-grid">{[500, 1000, 1500, 2000].map((amount) => { const currency = currencyOf(data.goals[0].currency); const remaining = Math.max(0, data.goals[0].target - goalSaved(data, "m4")); return <div key={amount}><span>{formatMoney(amount, currency)} / month</span><strong>{format(addMonths(new Date(), Math.ceil(remaining / amount)), "MMM yyyy")}</strong></div>; })}</div></Panel>
     </div>
   );
 }

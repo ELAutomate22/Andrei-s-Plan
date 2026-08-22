@@ -55,6 +55,7 @@ import {
   WeeklyReviewPage,
 } from "@/features/system/SystemPages";
 import { calculateScore, currentStreak, totals } from "@/lib/metrics";
+import { formatMoney } from "@/lib/money";
 type NavItem = {
   id: string;
   label: string;
@@ -209,7 +210,7 @@ export function AppShell() {
               <b>SCORE</b> {score}%
             </span>
             <span className="desktop-status">
-              <b>REVENUE</b> £{t.income.toLocaleString()}
+              <b>REVENUE</b> {formatMoney(t.income, data.settings.currency)}
             </span>
           </div>
           <div className="status-actions">
