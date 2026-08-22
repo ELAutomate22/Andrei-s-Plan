@@ -19,7 +19,7 @@ export interface Idea { id: string; title: string; description: string; category
 export interface Appointment { id: string; title: string; date: string; time: string; category: string; completed: boolean; notes: string; }
 export interface FocusSession { id: string; category: string; task: string; minutes: number; date: string; notes: string; completed: boolean; }
 export interface ReadingSession { id: string; type: "bible" | "book"; resource: string; pages?: number; chapter?: string; minutes: number; date: string; notes: string; lesson: string; }
-export interface LearningTrack { id: string; name: string; category: string; progress: number; hours: number; skills?: Record<string, number>; }
+export interface LearningTrack { id: string; name: string; category: string; progress: number; hours: number; skills?: Record<string, number>; courseUrl?: string; currentModule?: string; currentLesson?: string; nextAction?: string; keyTakeaway?: string; practicePlan?: string; studyNotes?: string; }
 export interface WeeklyReview { id: string; cycleId: string; weekNumber: number; wins: string; friction: string; lesson: string; nextObjective: string; ratings: Record<string, number>; }
 export interface AppData { version: 1; settings: UserSettings; cycles: Cycle[]; habits: HabitDefinition[]; dailyLogs: DailyLog[]; clients: Client[]; projects: Project[]; expenses: ExpenseEntry[]; income: IncomeEntry[]; goals: Goal[]; contributions: GoalContribution[]; ideas: Idea[]; appointments: Appointment[]; focusSessions: FocusSession[]; readingSessions: ReadingSession[]; learningTracks: LearningTrack[]; weeklyReviews: WeeklyReview[]; }
 

@@ -11,7 +11,7 @@ import {
   CircleCheck,
   Cloud,
   CloudOff,
-  Command,
+  GraduationCap,
   Crosshair,
   Dumbbell,
   Focus,
@@ -62,7 +62,7 @@ type NavItem = {
 };
 const nav: NavItem[] = [
   { id: "home", label: "Command Centre", icon: LayoutDashboard },
-  { id: "today", label: "Today", icon: Crosshair },
+  { id: "today", label: "Daily Tasks", icon: Crosshair },
   { id: "plan", label: "16 Week Plan", icon: Target },
   { id: "calendar", label: "Calendar", icon: CalendarDays },
   { id: "progress", label: "Progress", icon: BarChart3 },
@@ -70,7 +70,7 @@ const nav: NavItem[] = [
   { id: "clients", label: "Clients", icon: Users },
   { id: "projects", label: "Projects", icon: Dumbbell },
   { id: "money", label: "Money", icon: CircleDollarSign },
-  { id: "learning", label: "Learning", icon: Command },
+  { id: "learning", label: "IBM Course", icon: GraduationCap },
   { id: "reading", label: "Reading", icon: BookOpen },
   { id: "goals", label: "Goals", icon: Target },
   { id: "review", label: "Weekly Review", icon: BarChart3 },
@@ -265,7 +265,7 @@ export function AppShell() {
       <div className="bottom-nav">
         {[
           { id: "home", icon: Home, label: "Home" },
-          { id: "today", icon: Crosshair, label: "Today" },
+          { id: "today", icon: Crosshair, label: "Daily" },
           { id: "focus", icon: Focus, label: "Focus" },
           { id: "progress", icon: BarChart3, label: "Progress" },
         ].map((item) => (

@@ -163,3 +163,98 @@ button,a,input,select,textarea{touch-action:manipulation}
  .quick-add{bottom:calc(92px + env(safe-area-inset-bottom))}
  .app-footer{padding-bottom:calc(105px + env(safe-area-inset-bottom))}
 }
+
+/* Clear activity workspaces: IBM course and split reading logs. */
+.section-explainer{
+ color:var(--muted-text);
+ max-width:64ch;
+ margin:4px 0 22px;
+ font-size:.9rem;
+}
+.ibm-course-grid{
+ display:grid;
+ grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+ gap:12px;
+}
+.ibm-course-grid>.panel{margin:0}
+.ibm-learning-notes{grid-column:1/-1}
+.ibm-progress-panel .progress{margin:20px 0 24px}
+.ibm-course-grid label{
+ display:grid;
+ gap:7px;
+ margin-top:14px;
+ color:var(--muted-text);
+ font-size:.72rem;
+}
+.ibm-course-grid input,
+.ibm-course-grid textarea{
+ width:100%;
+ min-height:45px;
+ padding:10px 12px;
+ border:1px solid var(--border);
+ border-radius:2px;
+ background:var(--surface-2);
+ color:var(--text);
+ font-size:16px;
+}
+.ibm-course-grid textarea{min-height:104px;resize:vertical}
+.field-value{color:var(--accent);font-size:.68rem;letter-spacing:.06em}
+.course-link{width:max-content;margin-top:18px;text-decoration:none}
+.course-link svg{width:16px}
+.course-fields{display:grid;gap:2px}
+.course-notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.course-notes-grid .span-2{grid-column:1/-1}
+.reading-form-panel{margin-bottom:12px!important}
+.form-actions{display:flex;gap:8px;align-items:center}
+.reading-sections{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
+}
+.reading-section{
+ min-width:0;
+ padding:30px;
+}
+.reading-section-heading{align-items:center}
+.reading-section h2{margin:9px 0 0;font-size:clamp(1.75rem,3vw,2.6rem)}
+.section-icon{
+ width:52px;
+ height:52px;
+ flex:0 0 52px;
+ display:grid;
+ place-items:center;
+ border:1px solid var(--border);
+ border-radius:50%;
+ color:var(--accent);
+ background:rgba(5,24,11,.38);
+}
+.section-icon svg{width:22px}
+.reading-bible{border-top-color:var(--accent)}
+.reading-entry-list{display:grid;gap:8px;margin-top:26px}
+.reading-entry{
+ padding:16px;
+ border:1px solid var(--border);
+ background:color-mix(in srgb,var(--surface-2) 74%,transparent);
+}
+.reading-entry h4{margin:6px 0 0;font-size:1.05rem}
+.reading-entry p{margin:14px 0 10px;color:var(--muted-text)}
+.reading-entry small{color:var(--accent)}
+.reading-section .empty{padding:42px 18px;background:transparent}
+.focus-description{
+ max-width:620px;
+ margin:14px auto 0!important;
+ color:var(--muted-text);
+ font-size:.95rem;
+}
+@media(max-width:900px){
+ .ibm-course-grid,.reading-sections{grid-template-columns:1fr}
+ .ibm-learning-notes{grid-column:auto}
+}
+@media(max-width:760px){
+ .course-notes-grid{grid-template-columns:1fr}
+ .course-notes-grid .span-2{grid-column:auto}
+ .reading-section{padding:22px 18px}
+ .reading-section .button{width:100%}
+ .form-actions{flex-direction:column;align-items:stretch}
+ .form-actions .button{width:100%}
+}
